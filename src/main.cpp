@@ -2512,7 +2512,7 @@ INT_PTR CALLBACK MainWindowProc(
         // This is done async do taskmgr doesn't hand when the shell
         // is hung
 
-        PostThreadMessage( g_idTrayThread, PM_NOTIFYWAITING, 0, 0 );
+        PostThreadMessage( g_idTrayThread, PM_INITIALIZEICONS, 0, 0 );
     }
 
 

@@ -3074,8 +3074,9 @@ INT CProcPage::HandleProcPageNotify(LPNMHDR pnmhdr)
                     break;
 
                 case COL_COMMANDLINE:
-                    //  don't care if it truncates - UI only
-                    StringCchCopy(plvitem->pszText, plvitem->cchTextMax, pProcInfo->m_pszCommandLine);
+                    //  this should not be truncated, it could cut off critical info
+                    plvitem->pszText = pProcInfo->m_pszCommandLine;
+                    plvitem->cchTextMax = wcslen(pProcInfo->m_pszCommandLine) + 1;
                     break;
 
                 default:

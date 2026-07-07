@@ -1894,6 +1894,33 @@ Return Value:
 
 --*/
 
+typedef HRESULT (WINAPI *PFN_DwmGetWindowAttribute)(
+    HWND hwnd,
+    DWORD dwAttribute,
+    PVOID pvAttribute,
+    DWORD cbAttribute);
+
+BOOL IsWindowCloaked(HWND hwnd)
+{
+    BOOL bCloaked = FALSE;
+
+    HMODULE hDwm = LoadLibraryW(L"dwmapi.dll");
+    if (!hDwm)
+        return FALSE;
+
+    auto pfn = (PFN_DwmGetWindowAttribute)GetProcAddress(hDwm, "DwmGetWindowAttribute");
+    if (!pfn)
+    {
+        FreeLibrary(hDwm);
+        return FALSE;
+    }
+
+    (void)pfn(hwnd, DWMWA_CLOAKED, &bCloaked, sizeof(bCloaked));
+
+    FreeLibrary(hDwm);
+    return bCloaked;
+}
+
 BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
 {
     DWORD             i;
@@ -1912,9 +1939,7 @@ BOOL CALLBACK EnumWindowsProc(HWND    hwnd, LPARAM   lParam)
         return TRUE;
     }
 
-    BOOL bCloaked = FALSE;
-    DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED, &bCloaked, sizeof(bCloaked));
-    if (bCloaked)
+    if (IsWindowCloaked(hwnd))
     {
         // Immersive/UWP windows not shown to the user
 

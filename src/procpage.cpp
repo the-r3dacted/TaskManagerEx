@@ -3917,12 +3917,12 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
     case IDM_PROC_FILELOCATION:
         if (pProc)
         {
-            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pProc->m_UniqueProcessId);
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pProc->m_UniqueProcessId);
             if (hProcess)
             {
-                WCHAR pszName[MAX_PATH];
+                WCHAR pszName[MAX_PATH] = {0};
                 DWORD cchNameMax = MAX_PATH;
-                if (QueryFullProcessImageNameW(hProcess, NULL, pszName, &cchNameMax))
+                if (GetProcessImageFileNameW(hProcess, pszName, cchNameMax))
                 {
                     LPITEMIDLIST pidl;
                     if (SUCCEEDED(SHParseDisplayName(pszName, nullptr, &pidl, NULL, nullptr)))
@@ -3938,12 +3938,12 @@ void CProcPage::HandleWMCOMMAND( WORD id , HWND hCtrl )
     case IDM_PROC_PROPERTIES:
         if (pProc)
         {
-            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pProc->m_UniqueProcessId);
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pProc->m_UniqueProcessId);
             if (hProcess)
             {
-                WCHAR pszName[MAX_PATH];
+                WCHAR pszName[MAX_PATH] = {0};
                 DWORD cchNameMax = MAX_PATH;
-                if (QueryFullProcessImageNameW(hProcess, NULL, pszName, &cchNameMax))
+                if (GetProcessImageFileNameW(hProcess, pszName, cchNameMax))
                 {
                     SHELLEXECUTEINFOW sei = { 0 };
                     sei.cbSize = sizeof(sei);

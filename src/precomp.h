@@ -69,6 +69,9 @@ typedef short CSHORT;
 //#include <sspi.h>
 #include <secext.h>  // for GetUserNameEx
 #include <security.h>
+#define PSAPI_VERSION 1
+#include <psapi.h>
+#pragma comment(lib, "Psapi.lib")
 #include <powerbase.h>
 #include <ntstatus.h>
 #include <dwmapi.h>
